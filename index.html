@@ -477,7 +477,7 @@
 <!-- SPLASH SCREEN -->
 <div id="splash">
   <video id="splashVideo" autoplay muted loop playsinline>
-    <source src="Stvfitcat.MOV" type="video/MOV">
+    <source src="Stvfitcat.MOV" type="video/mp4">
   </video>
   <div id="splashOverlay">
     <img id="splashLogo" src="stv-logo.jpeg" alt="STV FIT" />
@@ -763,7 +763,7 @@
 
         <div style="margin-top:16px; background:#1a1a2e; border-radius:12px; padding:16px; border:1px solid rgba(57,255,20,0.15);">
           <div style="font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; color:var(--neon-green); text-transform:uppercase; margin-bottom:12px; text-shadow: 0 0 8px rgba(57,255,20,0.4);">
-            Move While You Listen
+            Dancing is the cheat code!
           </div>
           <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px; font-style:italic;">Hit play then get to work. No excuses — the music don't stop so neither do you.</p>
 
@@ -1171,12 +1171,23 @@ document.getElementById('alarmDismiss').addEventListener('click', function() {
 });
 
 // Radio
+// Radio
 let radioIsPlaying = false;
 function toggleRadio() {
   const audio = document.getElementById('radioPlayerAudio');
   const btn = document.getElementById('radioPlayBtn');
   const status = document.getElementById('radioStatusText');
   const bars = document.querySelectorAll('#radioEqBars .radio-bar');
+
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isIOS) {
+    window.open('https://listen.streamaudio.co/proxy/stvradio/stream', '_blank');
+    status.textContent = '📲 Opening stream in Safari...';
+    btn.textContent = '▶';
+    return;
+  }
+
   if (radioIsPlaying) {
     audio.pause();
     radioIsPlaying = false;
@@ -1185,21 +1196,20 @@ function toggleRadio() {
     btn.style.background = 'rgba(255,45,120,0.15)';
     bars.forEach(b => b.classList.add('paused'));
   } else {
-    audio.src = 'https://listen.streamaudio.co/proxy/stvradio/proxy';
+    audio.src = 'https://listen.streamaudio.co/proxy/stvradio/stream';
     audio.load();
     audio.play().then(() => {
       radioIsPlaying = true;
-      status.textContent = '🔴 LIVE — STV Radiomeltdown';
+      status.textContent = '24/7 STV Radiomeltdown.com';
       btn.textContent = '⏸';
       btn.style.background = 'rgba(255,45,120,0.3)';
       bars.forEach(b => b.classList.remove('paused'));
     }).catch(() => {
       status.textContent = 'Stream blocked — opening in new tab...';
-      window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
+      window.open('https://listen.streamaudio.co/proxy/stvradio/stream', '_blank');
     });
   }
 }
-function startRadio() { toggleRadio(); }
 
 // Tabs
 function switchTab(id) {
