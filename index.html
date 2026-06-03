@@ -722,44 +722,98 @@
               <div style="font-family:'Oswald',sans-serif; font-size:15px; color:var(--neon-pink); letter-spacing:1px; text-shadow:0 0 8px rgba(255,45,120,0.5);">📡 STV RADIOMELTDOWN</div>
               <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="radioStatusText">Tap play to tune in</div>
             </div>
-            function toggleRadio() {
-  const audio = document.getElementById('radioPlayerAudio');
-  const btn = document.getElementById('radioPlayBtn');
-  const status = document.getElementById('radioStatusText');
-  const bars = document.querySelectorAll('#radioEqBars .radio-bar');
-
-  // iOS Safari can't stream cross-origin audio in <audio> tags — open in new tab instead
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-  if (isIOS) {
-    window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
-    status.textContent = '📲 Opening stream in Safari...';
-    btn.textContent = '▶';
-    return;
-  }
-
-  if (radioIsPlaying) {
-    audio.pause();
-    radioIsPlaying = false;
-    status.textContent = 'Paused';
-    btn.textContent = '▶';
-    btn.style.background = 'rgba(255,45,120,0.15)';
-    bars.forEach(b => b.classList.add('paused'));
-  } else {
-    audio.src = 'https://listen.streamaudio.co/proxy/stvradio/proxy';
-    audio.load();
-    audio.play().then(() => {
-      radioIsPlaying = true;
-      status.textContent = '🔴 LIVE — STV Radiomeltdown';
-      btn.textContent = '⏸';
-      btn.style.background = 'rgba(255,45,120,0.3)';
-      bars.forEach(b => b.classList.remove('paused'));
-    }).catch(() => {
-      status.textContent = '📲 Opening stream in Safari...';
-      window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
-    });
-  }
-}
+            <button onclick="toggleRadio()" id="radioPlayBtn" style="
+              width:48px; height:48px; border-radius:50%;
+              background:rgba(255,45,120,0.15);
+              border:2px solid rgba(255,45,120,0.5);
+              color:var(--neon-pink); font-size:20px;
+              cursor:pointer; display:flex; align-items:center; justify-content:center;
+              transition:all 0.2s; flex-shrink:0;
+            ">▶</button>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:3px; height:28px; padding:0 16px 10px;" id="radioEqBars">
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+          </div>
+        </div>
+        <audio id="radioPlayerAudio" preload="none">
+          <source src="https://listen.streamaudio.co/proxy/stvradio/proxy" type="audio/mpeg">
+        </audio>
+        <a href="https://listen.streamaudio.co/proxy/stvradio/proxy" target="_blank" style="display:block; margin-top:10px; text-align:center; color:var(--neon-pink); font-size:13px; text-decoration:none; font-family:'Oswald',sans-serif; letter-spacing:1px;">
+          📻 OPEN RADIO IN NEW TAB ↗
+        </a>
+ 
+        <div style="margin-top:16px; background:#1a1a2e; border-radius:12px; padding:16px; border:1px solid rgba(57,255,20,0.15);">
+          <div style="font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; color:var(--neon-green); text-transform:uppercase; margin-bottom:12px; text-shadow: 0 0 8px rgba(57,255,20,0.4);">
+            🎵 Move While You Listen
+          </div>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px; font-style:italic;">Hit play then get to work. No excuses — the music don't stop so neither do you.</p>
+ 
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-green);">
+              <div style="font-size:20px; margin-bottom:4px;">🤸</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-green);">Jumping Jacks</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 30 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Arms + cardio. Start here.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-orange);">
+              <div style="font-size:20px; margin-bottom:4px;">🦵</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-orange);">Lunges</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 12 each leg</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Keep that knee behind your toe.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-pink);">
+              <div style="font-size:20px; margin-bottom:4px;">💪</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-pink);">Push Ups</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 10–15 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">On your knees is fine. Just do it.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-yellow);">
+              <div style="font-size:20px; margin-bottom:4px;">🏋️</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-yellow);">Squats</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 15 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Sit back like there's a chair. There isn't.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-blue);">
+              <div style="font-size:20px; margin-bottom:4px;">🏃</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-blue);">High Knees</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 30 seconds</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Run in place. Fast as you can.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid #a855f7;">
+              <div style="font-size:20px; margin-bottom:4px;">🧘</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:#a855f7;">Plank</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 20–30 sec</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Core tight. Don't you dare sag.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-orange);">
+              <div style="font-size:20px; margin-bottom:4px;">🦶</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-orange);">Calf Raises</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 20 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Hold the wall if you need to. No shame.</div>
+            </div>
+ 
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-green);">
+              <div style="font-size:20px; margin-bottom:4px;">🔥</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-green);">Burpees</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">2 sets × 8 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">You gon hate these. Do them anyway.</div>
+            </div>
+ 
+          </div>
 
         <div style="margin-top:16px; background:#1a1a2e; border-radius:12px; padding:16px; border:1px solid rgba(57,255,20,0.15);">
           <div style="font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; color:var(--neon-green); text-transform:uppercase; margin-bottom:12px; text-shadow: 0 0 8px rgba(57,255,20,0.4);">
