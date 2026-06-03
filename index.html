@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STV FIT 💀</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap');
+
+  /* SPLASH */
+  #splash {
+    position: fixed; top:0; left:0; width:100%; height:100%;
+    z-index: 99999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: #000;
+    overflow: hidden;
+  }
+  #splashVideo {
+    position: absolute; top:0; left:0; width:100%; height:100%;
+    object-fit: cover; opacity: 0.55;
+  }
+  #splashOverlay {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 28px;
+    text-align: center; padding: 24px;
+  }
+  #splashLogo {
+    width: min(260px, 70vw);
+    border-radius: 16px;
+    box-shadow: 0 0 40px rgba(57,255,20,0.5), 0 0 80px rgba(57,255,20,0.2);
+    animation: logoPulse 2.5s ease-in-out infinite;
+  }
+  @keyframes logoPulse {
+    0%,100% { box-shadow: 0 0 30px rgba(57,255,20,0.4), 0 0 60px rgba(57,255,20,0.15); }
+    50% { box-shadow: 0 0 60px rgba(57,255,20,0.8), 0 0 100px rgba(57,255,20,0.35); }
+  }
+  #enterBtn {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(18px, 5vw, 26px);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 16px 48px;
+    border-radius: 50px;
+    border: 2px solid var(--neon-green);
+    background: rgba(57,255,20,0.12);
+    color: var(--neon-green);
+    cursor: pointer;
+    text-shadow: 0 0 12px rgba(57,255,20,0.8);
+    box-shadow: 0 0 24px rgba(57,255,20,0.3), inset 0 0 20px rgba(57,255,20,0.05);
+    animation: btnPulse 1.8s ease-in-out infinite;
+    transition: all 0.2s;
+  }
+  #enterBtn:hover, #enterBtn:active {
+    background: rgba(57,255,20,0.25);
+    box-shadow: 0 0 40px rgba(57,255,20,0.6), inset 0 0 30px rgba(57,255,20,0.1);
+    transform: scale(1.04);
+  }
+  @keyframes btnPulse {
+    0%,100% { box-shadow: 0 0 20px rgba(57,255,20,0.3); }
+    50% { box-shadow: 0 0 40px rgba(57,255,20,0.6), 0 0 80px rgba(57,255,20,0.2); }
+  }
+  #splashTagline {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(12px, 3vw, 16px);
+    color: var(--neon-yellow);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(255,230,0,0.6);
+  }
+  #mainApp { display: none; }
+
+  :root {
+    --neon-green: #39ff14;
+    --neon-orange: #ff6b00;
+    --neon-pink: #ff2d78;
+    --neon-yellow: #ffe600;
+    --neon-blue: #00cfff;
+    --bg-dark: #0a0a0f;
+    --bg-card: #12121e;
+    --bg-card2: #1a1a2e;
+    --text-main: #f0f0f0;
+    --text-muted: #aaa;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SPOTLIGHT EFFECT */
+  .spotlight {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 0;
+    background: radial-gradient(ellipse 600px 400px at var(--mx, 50%) var(--my, 30%),
+      rgba(57,255,20,0.07) 0%, transparent 70%);
+    transition: background 0.1s;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 16px; }
+
+  /* HEADER */
+  .app-header {
+    text-align: center;
+    padding: 24px 16px 16px;
+    border-bottom: 1px solid rgba(57,255,20,0.2);
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .app-header h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(22px, 5vw, 38px);
+    color: var(--neon-green);
+    text-shadow: 0 0 12px rgba(57,255,20,0.6), 0 0 30px rgba(57,255,20,0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .app-header p {
+    color: var(--neon-orange);
+    font-size: 13px;
+    margin-top: 6px;
+    font-style: italic;
+    text-shadow: 0 0 8px rgba(255,107,0,0.5);
+  }
+
+  /* GLOW CARD */
+  .card {
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent, var(--neon-green)), transparent);
+  }
+  .card.orange { --accent: var(--neon-orange); }
+  .card.pink { --accent: var(--neon-pink); }
+  .card.blue { --accent: var(--neon-blue); }
+  .card.yellow { --accent: var(--neon-yellow); }
+
+  .card-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent, var(--neon-green));
+    box-shadow: 0 0 8px var(--accent, var(--neon-green));
+  }
+
+  /* ROAST BOX */
+  .roast-box {
+    background: var(--bg-card2);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+    border-left: 3px solid var(--neon-orange);
+    min-height: 60px;
+    display: flex; align-items: center;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--neon-yellow);
+    text-shadow: 0 0 6px rgba(255,230,0,0.4);
+    line-height: 1.5;
+  }
+  .roast-box.hidden { display: none; }
+
+  /* INPUTS */
+  input[type="text"], input[type="time"], textarea, select {
+    background: #1e1e30;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: var(--text-main);
+    padding: 10px 14px;
+    font-size: 14px;
+    width: 100%;
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 8px rgba(57,255,20,0.2);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.15s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-green {
+    background: rgba(57,255,20,0.15);
+    color: var(--neon-green);
+    border: 1px solid rgba(57,255,20,0.4);
+  }
+  .btn-green:hover { background: rgba(57,255,20,0.25); box-shadow: 0 0 12px rgba(57,255,20,0.3); }
+  .btn-orange {
+    background: rgba(255,107,0,0.15);
+    color: var(--neon-orange);
+    border: 1px solid rgba(255,107,0,0.4);
+  }
+  .btn-orange:hover { background: rgba(255,107,0,0.25); box-shadow: 0 0 12px rgba(255,107,0,0.3); }
+  .btn-pink {
+    background: rgba(255,45,120,0.15);
+    color: var(--neon-pink);
+    border: 1px solid rgba(255,45,120,0.4);
+  }
+  .btn-pink:hover { background: rgba(255,45,120,0.25); box-shadow: 0 0 12px rgba(255,45,120,0.3); }
+  .btn-blue {
+    background: rgba(0,207,255,0.15);
+    color: var(--neon-blue);
+    border: 1px solid rgba(0,207,255,0.4);
+  }
+  .btn-blue:hover { background: rgba(0,207,255,0.25); }
+  .btn-red {
+    background: rgba(255,50,50,0.15);
+    color: #ff5555;
+    border: 1px solid rgba(255,50,50,0.4);
+  }
+  .btn-full { width: 100%; }
+
+  /* CHOICE BUTTONS */
+  .choice-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .choice-btn {
+    flex: 1; min-width: 120px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--bg-card2);
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: 'Roboto', sans-serif;
+  }
+  .choice-btn:hover, .choice-btn.selected {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    background: rgba(57,255,20,0.08);
+    box-shadow: 0 0 8px rgba(57,255,20,0.2);
+  }
+  .choice-btn.bad.selected { border-color: var(--neon-orange); color: var(--neon-orange); background: rgba(255,107,0,0.08); box-shadow: 0 0 8px rgba(255,107,0,0.2); }
+
+  /* MEAL LOG TABLE */
+  .log-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .log-table th { color: var(--neon-green); font-family: 'Oswald', sans-serif; letter-spacing: 1px; text-transform: uppercase; padding: 8px 10px; border-bottom: 1px solid rgba(57,255,20,0.2); text-align: left; font-size: 11px; }
+  .log-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--text-main); vertical-align: top; }
+  .log-table tr:last-child td { border-bottom: none; }
+  .log-table tr:hover td { background: rgba(255,255,255,0.03); }
+
+  /* POO TRACKER */
+  .poo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 12px; }
+  .poo-btn {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    background: var(--bg-card2);
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    font-size: 10px; color: var(--text-muted);
+    transition: all 0.2s;
+    font-family: 'Roboto', sans-serif;
+  }
+  .poo-btn:hover { border-color: var(--neon-yellow); background: rgba(255,230,0,0.06); color: var(--neon-yellow); }
+  .poo-btn .poo-icon { font-size: 28px; }
+
+  /* WATER TRACKER */
+  .water-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .water-drop {
+    width: 36px; height: 36px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    background: rgba(0,207,255,0.15);
+    border: 1px solid rgba(0,207,255,0.3);
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .water-drop.filled { background: rgba(0,207,255,0.5); border-color: var(--neon-blue); box-shadow: 0 0 8px rgba(0,207,255,0.4); }
+
+  /* ALARM */
+  .alarm-display {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(36px, 8vw, 60px);
+    text-align: center;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px rgba(57,255,20,0.5);
+    letter-spacing: 4px;
+    padding: 10px 0;
+  }
+  .alarm-set-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .alarm-set-row input[type="time"] { flex: 1; min-width: 120px; }
+
+  /* ALARM BLASTING */
+  .alarm-blast {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.92);
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    align-items: center; justify-content: center; gap: 24px;
+    text-align: center;
+  }
+  .alarm-blast.active { display: flex; }
+  .alarm-blast-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 8vw, 56px);
+    color: var(--neon-orange);
+    text-shadow: 0 0 20px rgba(255,107,0,0.8);
+    animation: blastPulse 0.5s infinite alternate;
+  }
+  .alarm-blast-sub { color: var(--neon-yellow); font-size: 16px; }
+  @keyframes blastPulse { from { opacity: 0.7; } to { opacity: 1; } }
+  .dance-label {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(40px, 12vw, 80px);
+    color: var(--neon-pink);
+    text-shadow: 0 0 30px rgba(255,45,120,0.8), 0 0 60px rgba(255,45,120,0.4);
+    letter-spacing: 8px;
+    animation: danceGlow 0.8s infinite alternate;
+    display: none;
+  }
+  @keyframes danceGlow {
+    from { text-shadow: 0 0 20px rgba(255,45,120,0.8); }
+    to { text-shadow: 0 0 50px rgba(255,45,120,1), 0 0 80px rgba(57,255,20,0.5); }
+  }
+
+  /* RADIO PLAYER */
+  .radio-player {
+    background: var(--bg-card2);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex; align-items: center; gap: 14px;
+    border: 1px solid rgba(255,45,120,0.3);
+    margin-top: 12px;
+  }
+  .radio-eq { display: flex; align-items: flex-end; gap: 3px; height: 32px; }
+  .radio-bar {
+    width: 4px; background: var(--neon-pink); border-radius: 2px;
+    animation: eq 0.6s infinite alternate;
+    box-shadow: 0 0 6px var(--neon-pink);
+  }
+  .radio-bar:nth-child(1) { height: 40%; animation-delay: 0s; }
+  .radio-bar:nth-child(2) { height: 80%; animation-delay: 0.1s; }
+  .radio-bar:nth-child(3) { height: 60%; animation-delay: 0.2s; }
+  .radio-bar:nth-child(4) { height: 100%; animation-delay: 0.15s; }
+  .radio-bar:nth-child(5) { height: 50%; animation-delay: 0.05s; }
+  @keyframes eq { from { transform: scaleY(0.3); } to { transform: scaleY(1); } }
+  .radio-bar.paused { animation: none; height: 6px !important; }
+  .radio-info { flex: 1; }
+  .radio-info .station-name { font-family: 'Oswald', sans-serif; color: var(--neon-pink); font-size: 16px; text-shadow: 0 0 8px rgba(255,45,120,0.5); }
+  .radio-info .station-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* YOUTUBE */
+  .yt-frame { width: 100%; aspect-ratio: 16/9; border-radius: 12px; border: 1px solid rgba(255,50,50,0.3); overflow: hidden; }
+  .yt-frame iframe { width: 100%; height: 100%; border: none; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .tab-btn.active {
+    background: rgba(57,255,20,0.12);
+    border-color: rgba(57,255,20,0.4);
+    color: var(--neon-green);
+  }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* STOMACH LOG */
+  .pain-scale { display: flex; gap: 6px; margin: 10px 0; flex-wrap: wrap; }
+  .pain-dot {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    cursor: pointer; border: 2px solid transparent; transition: all 0.2s;
+    font-family: 'Oswald', sans-serif;
+  }
+  .pain-dot:nth-child(1) { background: rgba(57,255,20,0.2); color: var(--neon-green); }
+  .pain-dot:nth-child(2) { background: rgba(180,255,20,0.2); color: #b4ff14; }
+  .pain-dot:nth-child(3) { background: rgba(255,230,0,0.2); color: var(--neon-yellow); }
+  .pain-dot:nth-child(4) { background: rgba(255,150,0,0.2); color: #ff9600; }
+  .pain-dot:nth-child(5) { background: rgba(255,107,0,0.2); color: var(--neon-orange); }
+  .pain-dot:nth-child(6) { background: rgba(255,50,50,0.2); color: #ff3333; }
+  .pain-dot.selected { border-color: currentColor; box-shadow: 0 0 8px currentColor; transform: scale(1.1); }
+
+  /* MISC */
+  .section-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+  .mt8 { margin-top: 8px; }
+  .mt12 { margin-top: 12px; }
+  .mt16 { margin-top: 16px; }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .row > * { flex: 1; min-width: 120px; }
+
+  .log-entry {
+    background: var(--bg-card2);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    border-left: 3px solid var(--neon-green);
+    font-size: 13px;
+  }
+  .log-entry .entry-time { color: var(--text-muted); font-size: 11px; margin-bottom: 4px; }
+  .log-entry.poo { border-left-color: var(--neon-yellow); }
+  .log-entry.pain { border-left-color: var(--neon-orange); }
+
+  .empty-state { text-align: center; color: var(--text-muted); font-size: 13px; padding: 24px; font-style: italic; }
+
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 700;
+    margin-left: 6px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge-green { background: rgba(57,255,20,0.15); color: var(--neon-green); }
+  .badge-red { background: rgba(255,50,50,0.15); color: #ff5555; }
+  .badge-orange { background: rgba(255,107,0,0.15); color: var(--neon-orange); }
+
+  .clock-widget {
+    font-family: 'Oswald', sans-serif; letter-spacing: 3px;
+    color: var(--neon-green); font-size: 13px;
+    text-shadow: 0 0 8px rgba(57,255,20,0.5);
+  }
+
+  .header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+
+  .tooltip { position: relative; display: inline-block; }
+  .tooltip-text {
+    display: none; position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%);
+    background: #1e1e30; color: var(--text-main); padding: 6px 10px; border-radius: 6px;
+    font-size: 12px; white-space: nowrap; border: 1px solid rgba(255,255,255,0.1); z-index: 10;
+  }
+  .tooltip:hover .tooltip-text { display: block; }
+
+  @media (max-width: 480px) {
+    .container { padding: 10px; }
+    .poo-grid { grid-template-columns: repeat(4, 1fr); }
+    .alarm-set-row { flex-direction: column; }
+    .alarm-set-row input[type="time"] { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <video id="splashVideo" autoplay muted loop playsinline>
+    <source src="Stvfitcat.MOV" type="video/mp4">
+  </video>
+  <div id="splashOverlay">
+    <img id="splashLogo" src="stv-logo.jpeg" alt="STV FIT" />
+    <div id="splashTagline">New Body. New Vacay. Let's Get It.</div>
+    <button id="enterBtn" onclick="enterApp()">&#9889; ENTER STV FIT &#9889;</button>
+  </div>
+</div>
+
+<div id="mainApp">
+<div class="spotlight" id="spotlight"></div>
+
+<!-- ALARM BLAST OVERLAY -->
+<div class="alarm-blast" id="alarmBlast">
+  <div class="alarm-blast-title" id="alarmTitle">⏰ GET UP FAT ASS! ⏰</div>
+  <div class="alarm-blast-sub" id="alarmSub">Time to get moving, we talked about this!</div>
+  <div class="dance-label" id="danceLabel">DANCE</div>
+  <button class="btn btn-orange" id="alarmDismiss" style="font-size:18px; padding: 16px 40px;">TURN IT OFF</button>
+  <audio id="radioAudio" preload="none">
+    <source src="https://listen.streamaudio.co/proxy/stvradio/proxy" type="audio/mpeg">
+  </audio>
+</div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="app-header">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <span class="clock-widget" id="liveClock">00:00:00</span>
+      <span style="font-size:11px; color: var(--text-muted);">YOUR BODY'S RECEIPTS</span>
+    </div>
+    <h1>🍔 What Cho Fat Ass Eat?</h1>
+    <p>"Nobody said the road to health was pretty. But here we are."</p>
+  </div>
+
+  <!-- TICKER -->
+  <div style="background:#0d0d1a; border-top:1px solid rgba(255,230,0,0.3); border-bottom:1px solid rgba(255,230,0,0.3); overflow:hidden; white-space:nowrap; padding:8px 0; margin-bottom:16px; position:relative;">
+    <div id="tickerTrack" style="display:inline-block; animation: tickerScroll 22s linear infinite;">
+      <a href="https://fairefaretravels.github.io/agentsanecamack.github.io/" target="_blank" style="text-decoration:none; display:inline;">
+        <span style="color:var(--neon-yellow); font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-shadow:0 0 8px rgba(255,230,0,0.5);">
+          ✈️ &nbsp; NEW BODY NEW VACAY! &nbsp;•&nbsp; Book unbelievable deals with FAIR EFARE TRAVELS &nbsp;•&nbsp; FLIGHTS · HOTELS · ALL-INCLUSIVE &nbsp;•&nbsp; CLICK HERE TO BOOK NOW &nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+        <span style="color:var(--neon-yellow); font-family:'Oswald',sans-serif; font-size:13px; letter-spacing:2px; text-shadow:0 0 8px rgba(255,230,0,0.5);">
+          ✈️ &nbsp; NEW BODY NEW VACAY! &nbsp;•&nbsp; Book unbelievable deals with FAIR EFARE TRAVELS &nbsp;•&nbsp; FLIGHTS · HOTELS · ALL-INCLUSIVE &nbsp;•&nbsp; CLICK HERE TO BOOK NOW &nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        </span>
+      </a>
+    </div>
+  </div>
+  <style>
+    @keyframes tickerScroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+  </style>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('food')">🍕 Food</button>
+    <button class="tab-btn" onclick="switchTab('poo')">💩 Poo</button>
+    <button class="tab-btn" onclick="switchTab('stomach')">😣 Stomach</button>
+    <button class="tab-btn" onclick="switchTab('water')">💧 Water</button>
+    <button class="tab-btn" onclick="switchTab('alarm')">⏰ Alarm</button>
+    <button class="tab-btn" onclick="switchTab('workout')">🏋️ Workout</button>
+    <button class="tab-btn" onclick="switchTab('log')">📋 Log</button>
+  </div>
+
+  <!-- FOOD TAB -->
+  <div class="tab-panel active" id="tab-food">
+    <div class="card orange">
+      <div class="card-title"><span class="dot"></span>What You Put In Ya Mouth</div>
+
+      <div class="roast-box" id="roastBox">
+        Waiting to judge your food choices... 👀
+      </div>
+
+      <div class="section-label mt12">What did you eat?</div>
+      <input type="text" id="foodInput" placeholder="Go ahead... confess..." />
+
+      <div class="section-label mt12">Why did you eat that?</div>
+      <div class="choice-row" id="whyRow">
+        <div class="choice-btn" onclick="selectChoice(this,'why','hungry')">I was hungry 🤷</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'why','bored')">Boredom 📺</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'why','stress')">Stress eating 😤</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'why','craving')">Just wanted it 😈</div>
+      </div>
+
+      <div class="section-label mt12">How you feel after?</div>
+      <div class="choice-row" id="feelRow">
+        <div class="choice-btn" onclick="selectChoice(this,'feel','good')">✅ Good</div>
+        <div class="choice-btn" onclick="selectChoice(this,'feel','content')">😐 Content</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'feel','bloated')">🎈 Bloated</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'feel','gassy')">💨 Gassy</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'feel','pain')">😖 Stomach Pain</div>
+      </div>
+
+      <div class="section-label mt12">Would you eat this again?</div>
+      <div class="choice-row" id="eatAgainRow">
+        <div class="choice-btn" onclick="selectChoice(this,'again','yes')">Hell yeah 🤤</div>
+        <div class="choice-btn bad" onclick="selectChoice(this,'again','no')">Never again 🙅</div>
+        <div class="choice-btn" onclick="selectChoice(this,'again','maybe')">Maybe… 🤔</div>
+      </div>
+
+      <button class="btn btn-orange btn-full mt16" onclick="logFood()">LOG THIS MEAL →</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--neon-green)"></span>Daily Check-in</div>
+      <div id="checkinSection"></div>
+    </div>
+  </div>
+
+  <!-- POO TAB -->
+  <div class="tab-panel" id="tab-poo">
+    <div class="card yellow">
+      <div class="card-title"><span class="dot" style="background:var(--neon-yellow)"></span>Poo Tracker</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">What the toilet saw today. Your gut doesn't lie.</p>
+
+      <div class="section-label">Consistency (Bristol Scale)</div>
+      <div class="poo-grid">
+        <div class="poo-btn" onclick="logPoo('Type 1','💎')">
+          <span class="poo-icon">💎</span><span>Type 1<br>Hard Pellets</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 2','🪨')">
+          <span class="poo-icon">🪨</span><span>Type 2<br>Lumpy</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 3','🌭')">
+          <span class="poo-icon">🌭</span><span>Type 3<br>Cracked</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 4','🍌')">
+          <span class="poo-icon">🍌</span><span>Type 4<br>Perfect 👑</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 5','🍯')">
+          <span class="poo-icon">🍯</span><span>Type 5<br>Soft Blobs</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 6','💦')">
+          <span class="poo-icon">💦</span><span>Type 6<br>Fluffy</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Type 7','🌊')">
+          <span class="poo-icon">🌊</span><span>Type 7<br>Watery</span>
+        </div>
+        <div class="poo-btn" onclick="logPoo('Emergency','🚨')">
+          <span class="poo-icon">🚨</span><span>EMERGENCY</span>
+        </div>
+      </div>
+
+      <div class="section-label mt12">Notes (optional)</div>
+      <textarea id="pooNotes" placeholder="Anything notable? Pain? Urgency? Color? We need all the deets..."></textarea>
+      <div class="roast-box mt8" id="pooRoast" style="display:none; border-left-color: var(--neon-yellow);"></div>
+    </div>
+  </div>
+
+  <!-- STOMACH TAB -->
+  <div class="tab-panel" id="tab-stomach">
+    <div class="card pink">
+      <div class="card-title"><span class="dot" style="background:var(--neon-pink)"></span>Stomach Pain Log</div>
+
+      <div class="section-label">Pain level right now (1=none, 6=call 911)</div>
+      <div class="pain-scale" id="painScale">
+        <div class="pain-dot" onclick="selectPain(1,this)">1</div>
+        <div class="pain-dot" onclick="selectPain(2,this)">2</div>
+        <div class="pain-dot" onclick="selectPain(3,this)">3</div>
+        <div class="pain-dot" onclick="selectPain(4,this)">4</div>
+        <div class="pain-dot" onclick="selectPain(5,this)">5</div>
+        <div class="pain-dot" onclick="selectPain(6,this)">6</div>
+      </div>
+
+      <div class="section-label mt12">Type of discomfort</div>
+      <div class="choice-row" id="painTypeRow">
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','cramps')">Cramps</div>
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','bloat')">Bloating</div>
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','gas')">Gas</div>
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','nausea')">Nausea</div>
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','burning')">Burning</div>
+        <div class="choice-btn" onclick="selectChoice(this,'paintype','none')">All Clear 🎉</div>
+      </div>
+
+      <div class="section-label mt12">When did it start?</div>
+      <div class="choice-row" id="painWhenRow">
+        <div class="choice-btn" onclick="selectChoice(this,'painwhen','during')">During eating</div>
+        <div class="choice-btn" onclick="selectChoice(this,'painwhen','after')">Right after</div>
+        <div class="choice-btn" onclick="selectChoice(this,'painwhen','hour')">1 hour later</div>
+        <div class="choice-btn" onclick="selectChoice(this,'painwhen','random')">Random / idk</div>
+      </div>
+
+      <div class="section-label mt12">Any notes?</div>
+      <textarea id="stomachNotes" placeholder="What were you eating when this happened?"></textarea>
+      <button class="btn btn-pink btn-full mt12" onclick="logStomach()">LOG STOMACH EVENT</button>
+    </div>
+  </div>
+
+  <!-- WATER TAB -->
+  <div class="tab-panel" id="tab-water">
+    <div class="card blue">
+      <div class="card-title"><span class="dot" style="background:var(--neon-blue)"></span>Water Intake</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">Each drop = 8oz glass. Goal: 8 glasses. You probably drank none today. 🙄</p>
+
+      <div style="font-size:28px; font-family: 'Oswald', sans-serif; color:var(--neon-blue); text-align:center; margin: 10px 0; text-shadow: 0 0 12px rgba(0,207,255,0.5);">
+        <span id="waterCount">0</span> / 8 glasses
+      </div>
+
+      <div class="water-row" id="waterDrops">
+        <!-- drops rendered by JS -->
+      </div>
+
+      <div class="roast-box mt12" id="waterRoast" style="border-left-color: var(--neon-blue); color: var(--neon-blue); display:none;"></div>
+
+      <button class="btn btn-blue btn-full mt12" onclick="addWater()">+ I Drank Water!</button>
+      <button class="btn btn-red btn-full mt8" onclick="resetWater()">Reset Water Count</button>
+    </div>
+  </div>
+
+  <!-- ALARM TAB -->
+  <div class="tab-panel" id="tab-alarm">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Alarms & Radio</div>
+
+      <div class="alarm-display" id="clockDisplay">00:00:00</div>
+
+      <div style="background:#1a1a2e; border-radius:10px; padding:14px; margin-top:12px; border:1px solid rgba(255,255,255,0.07);">
+        <div class="section-label" style="margin-bottom:10px;">Add New Alarm</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="time" id="alarmTime" value="07:00" style="flex:1; min-width:110px;" />
+          <select id="alarmType" style="flex:2; min-width:150px;">
+            <option value="workout">Morning Workout 🏋️</option>
+            <option value="breakfast">Breakfast Check 🍳</option>
+            <option value="lunch">Lunch Check 🥗</option>
+            <option value="dinner">Dinner Check 🍽️</option>
+            <option value="water">Drink Water! 💧</option>
+            <option value="bed">Stop Eating! It's Late 🛑</option>
+          </select>
+        </div>
+        <button class="btn btn-green btn-full mt8" onclick="addAlarm()">+ ADD ALARM</button>
+      </div>
+
+      <div id="alarmList" style="margin-top:12px;"></div>
+
+      <div style="margin-top:16px; padding-top:16px; border-top: 1px solid rgba(255,255,255,0.07);">
+        <div class="card-title" style="margin-bottom:8px;"><span class="dot" style="background:var(--neon-pink)"></span>STV Radiomeltdown</div>
+        <div style="border-radius:12px; border:1px solid rgba(255,45,120,0.3); background:#0d0d1a; overflow:hidden;">
+          <div style="display:flex; align-items:center; gap:12px; padding:14px 16px;">
+            <img src="stv-logo.jpeg" alt="STV" style="width:52px; height:52px; border-radius:10px; object-fit:cover; box-shadow:0 0 12px rgba(255,45,120,0.5);" />
+            <div style="flex:1;">
+              <div style="font-family:'Oswald',sans-serif; font-size:15px; color:var(--neon-pink); letter-spacing:1px; text-shadow:0 0 8px rgba(255,45,120,0.5);">📡 STV RADIOMELTDOWN</div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="radioStatusText">Tap play to tune in</div>
+            </div>
+            <button onclick="toggleRadio()" id="radioPlayBtn" style="
+              width:48px; height:48px; border-radius:50%;
+              background:rgba(255,45,120,0.15);
+              border:2px solid rgba(255,45,120,0.5);
+              color:var(--neon-pink); font-size:20px;
+              cursor:pointer; display:flex; align-items:center; justify-content:center;
+              transition:all 0.2s; flex-shrink:0;
+            ">▶</button>
+          </div>
+          <div style="display:flex; align-items:flex-end; gap:3px; height:28px; padding:0 16px 10px;" id="radioEqBars">
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+            <div class="radio-bar paused"></div>
+          </div>
+        </div>
+        <audio id="radioPlayerAudio" preload="none">
+          <source src="https://listen.streamaudio.co/proxy/stvradio/proxy" type="audio/mpeg">
+        </audio>
+        <a href="https://listen.streamaudio.co/proxy/stvradio/proxy" target="_blank" style="display:block; margin-top:10px; text-align:center; color:var(--neon-pink); font-size:13px; text-decoration:none; font-family:'Oswald',sans-serif; letter-spacing:1px;">
+          📻 OPEN RADIO IN NEW TAB ↗
+        </a>
+
+        <div style="margin-top:16px; background:#1a1a2e; border-radius:12px; padding:16px; border:1px solid rgba(57,255,20,0.15);">
+          <div style="font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; color:var(--neon-green); text-transform:uppercase; margin-bottom:12px; text-shadow: 0 0 8px rgba(57,255,20,0.4);">
+            Move While You Listen
+          </div>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:14px; font-style:italic;">Hit play then get to work. No excuses — the music don't stop so neither do you.</p>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-green);">
+              <div style="font-size:20px; margin-bottom:4px;">🤸</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-green);">Jumping Jacks</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 30 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Arms + cardio. Start here.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-orange);">
+              <div style="font-size:20px; margin-bottom:4px;">🦵</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-orange);">Lunges</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 12 each leg</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Keep that knee behind your toe.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-pink);">
+              <div style="font-size:20px; margin-bottom:4px;">💪</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-pink);">Push Ups</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 10–15 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">On your knees is fine. Just do it.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-yellow);">
+              <div style="font-size:20px; margin-bottom:4px;">🏋️</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-yellow);">Squats</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 15 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Sit back like there's a chair. There isn't.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-blue);">
+              <div style="font-size:20px; margin-bottom:4px;">🏃</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-blue);">High Knees</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 30 seconds</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Run in place. Fast as you can.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid #a855f7;">
+              <div style="font-size:20px; margin-bottom:4px;">🧘</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:#a855f7;">Plank</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 20–30 sec</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Core tight. Don't you dare sag.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-orange);">
+              <div style="font-size:20px; margin-bottom:4px;">🦶</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-orange);">Calf Raises</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">3 sets × 20 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">Hold the wall if you need to. No shame.</div>
+            </div>
+
+            <div style="background:#12121e; border-radius:10px; padding:12px; border-left:3px solid var(--neon-green);">
+              <div style="font-size:20px; margin-bottom:4px;">🔥</div>
+              <div style="font-family:'Oswald',sans-serif; font-size:14px; color:var(--neon-green);">Burpees</div>
+              <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">2 sets × 8 reps</div>
+              <div style="font-size:11px; color:#555; margin-top:4px;">You gon hate these. Do them anyway.</div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:14px; background:#0a0a0f; border-radius:8px; padding:10px 14px; border:1px solid rgba(255,230,0,0.2); font-size:12px; color:var(--neon-yellow); text-align:center; font-style:italic;">
+            💀 Rest 45 seconds between sets. Drink water. You know you need it.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKOUT TAB -->
+  <div class="tab-panel" id="tab-workout">
+    <div class="card" style="--accent: #ff0000;">
+      <div class="card-title"><span class="dot" style="background:#ff4444; box-shadow: 0 0 8px #ff4444;"></span>Live Workouts — Faire Fare Travels</div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">No more excuses. You logged the ice cream. Now burn it. 🔥</p>
+
+      <!-- Live stream embed -->
+      <div class="yt-frame" id="ytLiveFrame">
+        <iframe
+          id="ytIframe"
+          src="https://www.youtube.com/embed/lFvfBqhziE0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="Live workout stream">
+        </iframe>
+      </div>
+
+      <!-- Shown when not live / embed fails -->
+      <div style="background:#1a1a2e; border-radius:12px; padding:20px; text-align:center; margin-top:10px; border:1px solid rgba(255,50,50,0.2);">
+        <div style="font-size:32px; margin-bottom:8px;">📺</div>
+        <div style="font-family:'Oswald',sans-serif; font-size:16px; color:#ff4444; letter-spacing:1px; margin-bottom:6px;">WATCH LIVE WORKOUTS</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-bottom:16px;">Tap below to open the channel. When a live stream is active it plays right there.</div>
+        <a href="https://www.youtube.com/channel/UCJtJOW3leDDn63zPq0qqmIw/live" target="_blank"
+          style="display:inline-block; padding:12px 28px; background:rgba(255,0,0,0.15); border:1px solid rgba(255,50,50,0.5); color:#ff4444; border-radius:8px; font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:2px; text-decoration:none; text-transform:uppercase; box-shadow:0 0 12px rgba(255,50,50,0.2);">
+          WATCH LIVE ON YOUTUBE ↗
+        </a>
+        <div style="margin-top:12px;">
+          <a href="https://www.youtube.com/channel/UCJtJOW3leDDn63zPq0qqmIw" target="_blank"
+            style="color:var(--text-muted); font-size:12px; text-decoration:none;">
+            Browse all videos & past workouts ↗
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOG TAB -->
+  <div class="tab-panel" id="tab-log">
+    <div class="card">
+      <div class="header-row">
+        <div class="card-title" style="margin-bottom:0;"><span class="dot"></span>Today's Receipts</div>
+        <button class="btn btn-red" onclick="clearLog()" style="font-size:11px; padding:6px 12px;">Clear All</button>
+      </div>
+      <div id="logDisplay">
+        <div class="empty-state">No entries yet. Go eat something so we can judge you. 🍔</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+function enterApp() {
+  const splash = document.getElementById('splash');
+  const app = document.getElementById('mainApp');
+  splash.style.transition = 'opacity 0.8s ease';
+  splash.style.opacity = '0';
+  setTimeout(() => {
+    splash.style.display = 'none';
+    app.style.display = 'block';
+  }, 800);
+}
+
+const ROASTS = {
+  icecream: ["You must wanna spend all day on the toilet, oh ok 🚽", "Ice cream?? Your colon about to file a restraining order."],
+  pizza: ["Three slices or thirteen? Be honest. 🍕", "Pizza at this hour? Your heartburn already knew."],
+  fries: ["Fries... AGAIN? Your arteries got something to say. 🍟", "You said you was on a diet. The fries said otherwise."],
+  burger: ["A whole burger huh? Bold move. Your bathroom disagrees. 🍔", "That burger gon hit different at 3am. Just sayin."],
+  chips: ["Chips ain't a meal boo 🥲", "You called chips a snack and ate the whole bag, didn't you?"],
+  cake: ["Cake?? Who birthday was it? YOUR STOMACH?? 🎂", "Nothing screams 'I gave up' like a whole slice of cake on a Tuesday."],
+  soda: ["Liquid sugar. Your pancreas waving bye bye. 🥤", "You coulda just drank water. But here we are with soda."],
+  donut: ["A donut?? The audacity. The NERVE. 🍩", "Your blood sugar said 'oh hell no' but you said 'watch me.'"],
+  salad: ["WAIT — a salad?? Ok ok I see you!! 🥗💪", "Look at you eating salad! Don't ruin it with ranch though."],
+  water: ["You drank water?! Pour one out, it's a miracle. 💧", "H2O! Progress! Now drink seven more."],
+  bored: ["So you ate because you were BORED? Put the fork down, pick up a hobby. 📺", "Boredom eating is just emotional eating in a hoodie."],
+  stress: ["You stress ate? Baby, the food didn't fix the stress. 😤", "Stress eating... the problem still gon be there after the snacks."],
+  late: ["It is how late and you eating?! Your metabolism clocked out hours ago. 🌙", "Late night eating? Your body's about to store every single calorie. Just so you know."],
+  default: [
+    "...Whatever it was, I hope you at least tasted it. 🙄",
+    "Not a single vegetable in sight, is there?",
+    "Your doctor would like a word. 👨‍⚕️",
+    "You put THAT in your body on purpose?",
+    "We don't have to tell anyone... but your gut already knows."
+  ],
+  good: ["OK I see you, healthy choices! Don't get cocky though. 💪", "Your future self is proud. Your past self was a disaster."],
+  bloated: ["Bloated? SHOCKING. Nobody could have predicted this. 🎈", "That bloat is your stomach sending an urgent memo."],
+  gassy: ["Oh you gassy huh? The room already knows. 💨", "Gas? Your gut said 'this food was a mistake and I'm telling on you.'"],
+  pain: ["Stomach pain after eating that? File this under 'consequences of your own choices.' 😖", "Pain means LISTEN TO YA BODY. It been trying to tell you."]
+};
+
+function getRoast(keys) {
+  for (const k of keys) {
+    const arr = ROASTS[k];
+    if (arr) return arr[Math.floor(Math.random()*arr.length)];
+  }
+  const d = ROASTS.default;
+  return d[Math.floor(Math.random()*d.length)];
+}
+
+function detectFood(text) {
+  const t = text.toLowerCase();
+  if (/ice.?cream/.test(t)) return 'icecream';
+  if (/pizza/.test(t)) return 'pizza';
+  if (/fries|french fry/.test(t)) return 'fries';
+  if (/burger|hamburger/.test(t)) return 'burger';
+  if (/chips|crisps/.test(t)) return 'chips';
+  if (/cake|cupcake/.test(t)) return 'cake';
+  if (/soda|cola|pepsi|sprite|pop/.test(t)) return 'soda';
+  if (/donut|doughnut/.test(t)) return 'donut';
+  if (/salad/.test(t)) return 'salad';
+  return null;
+}
+
+const state = {
+  why: null, feel: null, again: null,
+  paintype: null, painwhen: null,
+  painLevel: null,
+  pooType: null,
+  waterCount: parseInt(localStorage.getItem('wc')||'0'),
+  alarms: JSON.parse(localStorage.getItem("alarms")||"[]"),
+  log: JSON.parse(localStorage.getItem('log')||'[]'),
+  radioPlaying: false
+};
+
+function selectChoice(el, key, val) {
+  const row = document.getElementById(key+'Row') || el.parentElement;
+  row.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('selected','bad'));
+  el.classList.add('selected');
+  if (el.classList.contains) {
+    const isBad = ['bored','stress','craving','bloated','gassy','pain','no','bad'].includes(val);
+    if (isBad) el.classList.add('bad');
+  }
+  state[key] = val;
+  if (key === 'feel') {
+    const rb = document.getElementById('roastBox');
+    rb.textContent = getRoast([val]);
+    rb.classList.remove('hidden');
+  }
+  if (key === 'why' && val !== 'hungry') {
+    const rb = document.getElementById('roastBox');
+    rb.textContent = getRoast([val]);
+    rb.classList.remove('hidden');
+  }
+}
+
+function logFood() {
+  const food = document.getElementById('foodInput').value.trim();
+  if (!food) { alert("TYPE SOMETHING. What did you eat?!"); return; }
+  const foodKey = detectFood(food);
+  const keys = [foodKey, state.why, state.feel].filter(Boolean);
+  const roast = getRoast(keys);
+
+  const now = new Date();
+  const isLate = now.getHours() >= 21;
+  const entry = {
+    type: 'food', time: now.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+    food, why: state.why, feel: state.feel, again: state.again,
+    roast: isLate ? getRoast(['late']) : roast
+  };
+  state.log.unshift(entry);
+  localStorage.setItem('log', JSON.stringify(state.log.slice(0,100)));
+  renderLog();
+
+  document.getElementById('roastBox').textContent = entry.roast;
+  document.getElementById('roastBox').classList.remove('hidden');
+  document.getElementById('foodInput').value = '';
+}
+
+function logPoo(type, emoji) {
+  state.pooType = type;
+  const notes = document.getElementById('pooNotes').value;
+  const roastMap = {
+    'Type 1': "Hard as rocks? DRINK WATER. RIGHT NOW. 💎",
+    'Type 7': "Watery situation?? Your gut is staging a protest. 🌊",
+    'Emergency': "EMERGENCY?! What did you EAT?! 🚨",
+    'Type 4': "Type 4 — the GOLD STANDARD. Your gut is thriving. 🏆"
+  };
+  const roast = roastMap[type] || "Your colon has spoken. Log noted. 💩";
+  const pr = document.getElementById('pooRoast');
+  pr.textContent = roast; pr.style.display = 'flex';
+
+  const entry = { type: 'poo', time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}), pooType: type+' '+emoji, notes, roast };
+  state.log.unshift(entry);
+  localStorage.setItem('log', JSON.stringify(state.log.slice(0,100)));
+  renderLog();
+}
+
+function selectPain(level, el) {
+  document.querySelectorAll('.pain-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+  state.painLevel = level;
+}
+
+function logStomach() {
+  const notes = document.getElementById('stomachNotes').value;
+  const entry = {
+    type: 'pain', time: new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}),
+    level: state.painLevel, paintype: state.paintype, when: state.painwhen, notes
+  };
+  state.log.unshift(entry);
+  localStorage.setItem('log', JSON.stringify(state.log.slice(0,100)));
+  renderLog();
+  alert("Stomach event logged. If this keeps happening, time to look at what you eating. 👀");
+}
+
+// Water
+function renderWater() {
+  const c = state.waterCount;
+  document.getElementById('waterCount').textContent = c;
+  const drops = document.getElementById('waterDrops');
+  drops.innerHTML = '';
+  for (let i=0; i<8; i++) {
+    const d = document.createElement('div');
+    d.className = 'water-drop' + (i < c ? ' filled' : '');
+    d.textContent = '💧';
+    drops.appendChild(d);
+  }
+  const wr = document.getElementById('waterRoast');
+  if (c === 0) { wr.textContent = "Zero water today. Your kidneys are BEGGING you. 😭"; wr.style.display='flex'; }
+  else if (c < 4) { wr.textContent = `Only ${c} glass${c>1?'es':''} of water? That's it?? Drink more!`; wr.style.display='flex'; }
+  else if (c >= 8) { wr.textContent = "8 glasses!! I am SHOCKED and IMPRESSED. 💧👑"; wr.style.display='flex'; }
+  else { wr.style.display='none'; }
+}
+
+function addWater() {
+  if (state.waterCount < 20) { state.waterCount++; localStorage.setItem('wc', state.waterCount); renderWater(); }
+}
+function resetWater() {
+  state.waterCount = 0; localStorage.setItem('wc', 0); renderWater();
+}
+
+// Log render
+function renderLog() {
+  const el = document.getElementById('logDisplay');
+  if (!state.log.length) { el.innerHTML = '<div class="empty-state">No entries yet. Go eat something so we can judge you. 🍔</div>'; return; }
+  el.innerHTML = state.log.slice(0,30).map(e => {
+    if (e.type === 'food') {
+      return `<div class="log-entry">
+        <div class="entry-time">${e.time} · MEAL</div>
+        <strong>${e.food}</strong><br>
+        <span style="color:var(--text-muted);font-size:12px;">Why: ${e.why||'?'} · Feel: ${e.feel||'?'} · Again: ${e.again||'?'}</span><br>
+        <span style="color:var(--neon-yellow);font-style:italic;font-size:12px;">"${e.roast}"</span>
+      </div>`;
+    } else if (e.type === 'poo') {
+      return `<div class="log-entry poo">
+        <div class="entry-time">${e.time} · BATHROOM VISIT 💩</div>
+        <strong>${e.pooType}</strong>${e.notes?`<br><span style="color:var(--text-muted);font-size:12px;">${e.notes}</span>`:''}
+        <br><span style="color:var(--neon-yellow);font-style:italic;font-size:12px;">"${e.roast}"</span>
+      </div>`;
+    } else {
+      return `<div class="log-entry pain">
+        <div class="entry-time">${e.time} · STOMACH EVENT 😣</div>
+        <strong>Pain level: ${e.level||'?'}/6</strong> · ${e.paintype||'unspecified'}<br>
+        <span style="color:var(--text-muted);font-size:12px;">When: ${e.when||'?'}</span>
+        ${e.notes?`<br><span style="color:var(--text-muted);font-size:12px;">${e.notes}</span>`:''}
+      </div>`;
+    }
+  }).join('');
+}
+
+function clearLog() {
+  if (confirm('Delete all logs? Your receipts will be gone.')) {
+    state.log = []; localStorage.removeItem('log'); renderLog();
+  }
+}
+
+// Clock
+function updateClock() {
+  const now = new Date();
+  const t = now.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  document.getElementById('liveClock').textContent = t;
+  const cd = document.getElementById('clockDisplay');
+  if (cd) cd.textContent = t;
+  checkAlarm(now);
+}
+
+// Multi-Alarm System
+const alarmMessages = {
+  workout: { title: "⏰ GET UP!! WORKOUT TIME!", sub: "No snooze button for ya metabolism. Let's GO." },
+  breakfast: { title: "🍳 DID YOU EAT BREAKFAST?", sub: "Answer the app honestly. We don't judge... much." },
+  lunch: { title: "🥗 HEY — DID YOU EAT LUNCH?", sub: "And was it actually food, or just vibes?" },
+  dinner: { title: "🍽️ DINNER TIME CHECK", sub: "Keep it reasonable. Don't go crazy." },
+  water: { title: "💧 DRINK SOME WATER!", sub: "Not soda. Not juice. WATER. Right now." },
+  bed: { title: "🛑 STOP EATING! IT'S LATE!", sub: "Your metabolism is CLOSED. Put. The. Food. Down." }
+};
+
+const typeLabels = {
+  workout: "Morning Workout 🏋️", breakfast: "Breakfast Check 🍳",
+  lunch: "Lunch Check 🥗", dinner: "Dinner Check 🍽️",
+  water: "Drink Water! 💧", bed: "Stop Eating! It's Late 🛑"
+};
+
+function saveAlarms() {
+  localStorage.setItem('alarms', JSON.stringify(state.alarms));
+}
+
+function addAlarm() {
+  const t = document.getElementById('alarmTime').value;
+  const type = document.getElementById('alarmType').value;
+  if (!t) { alert("Pick a time first!"); return; }
+  const duplicate = state.alarms.find(a => a.time === t && a.type === type);
+  if (duplicate) { alert("That alarm already exists!"); return; }
+  state.alarms.push({ id: Date.now(), time: t, type: type, active: true, fired: false });
+  saveAlarms();
+  renderAlarms();
+}
+
+function deleteAlarm(id) {
+  state.alarms = state.alarms.filter(a => a.id !== id);
+  saveAlarms();
+  renderAlarms();
+}
+
+function toggleAlarmActive(id) {
+  const alarm = state.alarms.find(a => a.id === id);
+  if (alarm) { alarm.active = !alarm.active; alarm.fired = false; }
+  saveAlarms();
+  renderAlarms();
+}
+
+function renderAlarms() {
+  const el = document.getElementById('alarmList');
+  if (!state.alarms.length) {
+    el.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:16px; font-style:italic;">No alarms set. Add one above. ⏰</div>';
+    return;
+  }
+  const sorted = [...state.alarms].sort((a,b) => a.time.localeCompare(b.time));
+  el.innerHTML = sorted.map(alarm => `
+    <div style="display:flex; align-items:center; gap:10px; background:#1a1a2e; border-radius:10px; padding:12px 14px; margin-bottom:8px; border-left:3px solid ${alarm.active ? 'var(--neon-green)' : '#444'}; opacity:${alarm.active ? 1 : 0.5};">
+      <div style="flex:1;">
+        <div style="font-family:'Oswald',sans-serif; font-size:20px; color:${alarm.active ? 'var(--neon-green)' : 'var(--text-muted)'}; letter-spacing:2px; text-shadow:${alarm.active ? '0 0 8px rgba(57,255,20,0.5)' : 'none'};">${alarm.time}</div>
+        <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${typeLabels[alarm.type]||alarm.type}</div>
+      </div>
+      <button onclick="toggleAlarmActive(${alarm.id})" style="background:${alarm.active ? 'rgba(57,255,20,0.15)' : 'rgba(255,255,255,0.05)'}; border:1px solid ${alarm.active ? 'rgba(57,255,20,0.4)' : 'rgba(255,255,255,0.1)'}; color:${alarm.active ? 'var(--neon-green)' : 'var(--text-muted)'}; border-radius:20px; padding:5px 12px; cursor:pointer; font-size:11px; font-family:'Oswald',sans-serif; letter-spacing:1px;">
+        ${alarm.active ? 'ON' : 'OFF'}
+      </button>
+      <button onclick="deleteAlarm(${alarm.id})" style="background:rgba(255,50,50,0.1); border:1px solid rgba(255,50,50,0.3); color:#ff5555; border-radius:8px; width:32px; height:32px; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center;">✕</button>
+    </div>
+  `).join('');
+}
+
+const firedAlarms = new Set();
+function checkAlarm(now) {
+  const key = now.getHours() + ':' + now.getMinutes();
+  state.alarms.forEach(alarm => {
+    if (!alarm.active) return;
+    const [h, m] = alarm.time.split(':').map(Number);
+    const alarmKey = alarm.id + ':' + h + ':' + m;
+    if (now.getHours() === h && now.getMinutes() === m && now.getSeconds() < 3) {
+      if (!firedAlarms.has(alarmKey)) {
+        firedAlarms.add(alarmKey);
+        fireAlarm(alarm.type);
+      }
+    } else {
+      firedAlarms.delete(alarmKey);
+    }
+  });
+}
+
+function fireAlarm(type) {
+  const msg = alarmMessages[type||'workout'];
+  document.getElementById('alarmTitle').textContent = msg.title;
+  document.getElementById('alarmSub').textContent = msg.sub;
+  const blast = document.getElementById('alarmBlast');
+  blast.classList.add('active');
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const beep = () => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880; o.type = 'square';
+      g.gain.setValueAtTime(0.3, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.3);
+    };
+    let i = 0;
+    const bi = setInterval(() => { beep(); if(++i > 8) clearInterval(bi); }, 400);
+    blast._beepInterval = bi;
+  } catch(e) {}
+}
+
+document.getElementById('alarmDismiss').addEventListener('click', function() {
+  const blast = document.getElementById('alarmBlast');
+  blast.classList.remove('active');
+  if (blast._beepInterval) clearInterval(blast._beepInterval);
+  document.getElementById('danceLabel').style.display = 'block';
+  setTimeout(() => {
+    document.getElementById('danceLabel').style.display = 'none';
+    window.open('https://listen.streamaudio.co/proxy/stvradio/stream', '_blank');
+    switchTab('alarm');
+  }, 1500);
+});
+
+// Radio
+let radioIsPlaying = false;
+function toggleRadio() {
+  const audio = document.getElementById('radioPlayerAudio');
+  const btn = document.getElementById('radioPlayBtn');
+  const status = document.getElementById('radioStatusText');
+  const bars = document.querySelectorAll('#radioEqBars .radio-bar');
+  if (radioIsPlaying) {
+    audio.pause();
+    radioIsPlaying = false;
+    status.textContent = 'Paused';
+    btn.textContent = '▶';
+    btn.style.background = 'rgba(255,45,120,0.15)';
+    bars.forEach(b => b.classList.add('paused'));
+  } else {
+    audio.src = 'https://listen.streamaudio.co/proxy/stvradio/stream';
+    audio.load();
+    audio.play().then(() => {
+      radioIsPlaying = true;
+      status.textContent = '🔴 LIVE — STV Radiomeltdown';
+      btn.textContent = '⏸';
+      btn.style.background = 'rgba(255,45,120,0.3)';
+      bars.forEach(b => b.classList.remove('paused'));
+    }).catch(() => {
+      status.textContent = 'Stream blocked — opening in new tab...';
+      window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
+    });
+  }
+}
+function startRadio() { toggleRadio(); }
+
+// Tabs
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  const tabs = ['food','poo','stomach','water','alarm','workout','log'];
+  const idx = tabs.indexOf(id);
+  document.querySelectorAll('.tab-btn')[idx]?.classList.add('active');
+}
+
+// Checkin (noon check)
+function setupCheckin() {
+  const h = new Date().getHours();
+  const el = document.getElementById('checkinSection');
+  if (h >= 12 && h < 14) {
+    el.innerHTML = `
+      <p style="color:var(--neon-yellow); margin-bottom:12px;">🕛 It's noon — did you eat breakfast today?</p>
+      <div class="choice-row">
+        <div class="choice-btn" onclick="breakfastAnswer(true, this)">✅ Yes I did</div>
+        <div class="choice-btn bad" onclick="breakfastAnswer(false, this)">❌ No...</div>
+      </div>
+      <div class="roast-box mt8 hidden" id="breakfastRoast"></div>`;
+  } else if (h >= 21) {
+    el.innerHTML = `<div class="roast-box" style="border-left-color:var(--neon-pink); color:var(--neon-pink);">🛑 It's after 9PM. Your metabolism is CLOSED for business. Step away from the kitchen.</div>`;
+  } else {
+    el.innerHTML = `<p style="color:var(--text-muted); font-size:13px;">Daily check-ins appear at noon and evening. Come back then for the judgment.</p>`;
+  }
+}
+
+function breakfastAnswer(ate, el) {
+  const r = document.getElementById('breakfastRoast');
+  r.classList.remove('hidden');
+  if (ate) {
+    r.textContent = "OK good. Now tell me what you ate. Tap the food tab. 👆";
+    el.parentElement.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents='none');
+    el.classList.add('selected');
+  } else {
+    r.textContent = "You skipped breakfast?? No wonder you eat everything in sight by 2pm. 🙄";
+    el.parentElement.querySelectorAll('.choice-btn').forEach(b => b.style.pointerEvents='none');
+    el.classList.add('selected', 'bad');
+  }
+}
+
+// Spotlight
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / window.innerWidth * 100).toFixed(1) + '%';
+  const y = (e.clientY / window.innerHeight * 100).toFixed(1) + '%';
+  document.getElementById('spotlight').style.setProperty('--mx', x);
+  document.getElementById('spotlight').style.setProperty('--my', y);
+});
+
+// Init
+renderAlarms();
+renderWater();
+renderLog();
+setupCheckin();
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</div><!-- /mainApp -->
+</body>
+</html>
