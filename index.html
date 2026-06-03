@@ -477,7 +477,7 @@
 <!-- SPLASH SCREEN -->
 <div id="splash">
   <video id="splashVideo" autoplay muted loop playsinline>
-    <source src="Stvfitcat.MOV" type="video/mp4">
+    <source src="Stvfitcat.MOV" type="video/MOV">
   </video>
   <div id="splashOverlay">
     <img id="splashLogo" src="stv-logo.jpeg" alt="STV FIT" />
@@ -496,7 +496,7 @@
   <div class="dance-label" id="danceLabel">DANCE</div>
   <button class="btn btn-orange" id="alarmDismiss" style="font-size:18px; padding: 16px 40px;">TURN IT OFF</button>
   <audio id="radioAudio" preload="none">
-    <source src="https://listen.streamaudio.co/proxy/stvradio/proxy" type="audio/mpeg">
+    <source src="https://listen.streamaudio.co/proxy/stvradio/stream" type="audio/mpeg">
   </audio>
 </div>
 
@@ -508,7 +508,7 @@
       <span class="clock-widget" id="liveClock">00:00:00</span>
       <span style="font-size:11px; color: var(--text-muted);">YOUR BODY'S RECEIPTS</span>
     </div>
-    <h1>🍔 What Cho Fat Ass Eat?</h1>
+    <h1>LIFTING SPOONS IS NOT A WORKOUT?</h1>
     <p>"Nobody said the road to health was pretty. But here we are."</p>
   </div>
 
@@ -722,32 +722,44 @@
               <div style="font-family:'Oswald',sans-serif; font-size:15px; color:var(--neon-pink); letter-spacing:1px; text-shadow:0 0 8px rgba(255,45,120,0.5);">📡 STV RADIOMELTDOWN</div>
               <div style="font-size:11px; color:var(--text-muted); margin-top:2px;" id="radioStatusText">Tap play to tune in</div>
             </div>
-            <button onclick="toggleRadio()" id="radioPlayBtn" style="
-              width:48px; height:48px; border-radius:50%;
-              background:rgba(255,45,120,0.15);
-              border:2px solid rgba(255,45,120,0.5);
-              color:var(--neon-pink); font-size:20px;
-              cursor:pointer; display:flex; align-items:center; justify-content:center;
-              transition:all 0.2s; flex-shrink:0;
-            ">▶</button>
-          </div>
-          <div style="display:flex; align-items:flex-end; gap:3px; height:28px; padding:0 16px 10px;" id="radioEqBars">
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-            <div class="radio-bar paused"></div>
-          </div>
-        </div>
-        <audio id="radioPlayerAudio" preload="none">
-          <source src="https://listen.streamaudio.co/proxy/stvradio/stream" type="audio/mpeg">
-        </audio>
-        <a href="https://listen.streamaudio.co/proxy/stvradio/stream" target="_blank" style="display:block; margin-top:10px; text-align:center; color:var(--neon-pink); font-size:13px; text-decoration:none; font-family:'Oswald',sans-serif; letter-spacing:1px;">
-          📻 OPEN RADIO IN NEW TAB ↗
-        </a>
+            function toggleRadio() {
+  const audio = document.getElementById('radioPlayerAudio');
+  const btn = document.getElementById('radioPlayBtn');
+  const status = document.getElementById('radioStatusText');
+  const bars = document.querySelectorAll('#radioEqBars .radio-bar');
+
+  // iOS Safari can't stream cross-origin audio in <audio> tags — open in new tab instead
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  if (isIOS) {
+    window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
+    status.textContent = '📲 Opening stream in Safari...';
+    btn.textContent = '▶';
+    return;
+  }
+
+  if (radioIsPlaying) {
+    audio.pause();
+    radioIsPlaying = false;
+    status.textContent = 'Paused';
+    btn.textContent = '▶';
+    btn.style.background = 'rgba(255,45,120,0.15)';
+    bars.forEach(b => b.classList.add('paused'));
+  } else {
+    audio.src = 'https://listen.streamaudio.co/proxy/stvradio/proxy';
+    audio.load();
+    audio.play().then(() => {
+      radioIsPlaying = true;
+      status.textContent = '🔴 LIVE — STV Radiomeltdown';
+      btn.textContent = '⏸';
+      btn.style.background = 'rgba(255,45,120,0.3)';
+      bars.forEach(b => b.classList.remove('paused'));
+    }).catch(() => {
+      status.textContent = '📲 Opening stream in Safari...';
+      window.open('https://listen.streamaudio.co/proxy/stvradio/proxy', '_blank');
+    });
+  }
+}
 
         <div style="margin-top:16px; background:#1a1a2e; border-radius:12px; padding:16px; border:1px solid rgba(57,255,20,0.15);">
           <div style="font-family:'Oswald',sans-serif; font-size:14px; letter-spacing:1px; color:var(--neon-green); text-transform:uppercase; margin-bottom:12px; text-shadow: 0 0 8px rgba(57,255,20,0.4);">
